@@ -15,13 +15,10 @@ pyPodFetch works with one or more files containing the podcasts you want to subs
 ### Podcast lists
 A sample podcast file looks like this:
 ```
-
+10 http://www.nycskeptics.org/storage/feeds/rs.xml
 ```
-
-### Fetching
-
 ### Configuration
-
+### Fetching
 Simply run the fetching script:
 ```
 python fetchPodcasts.py
