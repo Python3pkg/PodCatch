@@ -4,9 +4,9 @@ from os import path
 
 setup(
     name='podcatch',
-    version='0.0.12',
+    version='0.0.13',
     description='Podcast fetcher and tagger',
-    url='https://github.com/pypa/sampleproject',#TODO
+    url='https://github.com/jlallouette/PodCatch',
     author='Jules Lallouette',
     author_email='jules@lallouette.fr',
     license='GNU GPL v3',
