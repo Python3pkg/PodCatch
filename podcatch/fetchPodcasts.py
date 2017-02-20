@@ -55,7 +55,7 @@ def main():
 				raise ValueError(currPodPath + ' (in ' + podcastListPath + ') is not an absolute path.')
 	podcastList.close()
 
-	print(unicode(nbPodUpdated) + u' podcast' + ('s have' if nbPodUpdated > 1 else ' has') +' been updated.')
+	print(unicode(nbPodUpdated) + u' podcast' + (' has' if nbPodUpdated == 1 else 's have') +' been updated.')
 	if nbPodUpdated == 0:
 		print(podcastListPath + u" didn't contain any podcasts.")
 
