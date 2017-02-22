@@ -1,5 +1,5 @@
 # Podcatch
-Podcatch is a simple podcast fetching tool made to be used with software like [gmusicbrowser](http://gmusicbrowser.org/), that are designed to handle large music libraries.
+Podcatch is a simple command-line podcast fetching tool made to be used with software like [gmusicbrowser](http://gmusicbrowser.org/), that are designed to handle large music libraries.
 Podcatch treats podcasts as albums among an already existing music library; it downloads the last episodes, applies mp3 or FLAC tags, and downloads a front picture (if available) to be used by your music library software.
 
 ## Installation 
