@@ -55,6 +55,7 @@ For each field that you want to modify, you need to supply 3 things:
 - the name of the field;
 - the regular expression (enclosed by quotes) that will be matched by the field;
 - the text to replace it with (enclosed by quotes).
+
 In the example, we're modifying the title by capturing the beginning of all episodes (`Rationally Speaking #[0-9]+ - `) and then adding a group that captures everything else `(.*)`.
 The new title only contains what the group contained, you can refer to groups by using `\g<1>`, replacing 1 by the group number.
 The syntax is the same as what you would use with `re.sub(...)` in python (see the [documentation](https://docs.python.org/3.5/library/re.html#re.sub)).
