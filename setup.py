@@ -4,7 +4,7 @@ from os import path
 
 setup(
     name='podcatch',
-    version='0.0.13',
+    version='0.0.14',
     description='Podcast fetcher and tagger',
     url='https://github.com/jlallouette/PodCatch',
     author='Jules Lallouette',
