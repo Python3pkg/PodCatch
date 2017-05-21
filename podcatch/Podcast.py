@@ -13,16 +13,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------------
-from Episode import *
-from Parameters import *
-from Utilities import *
+from .Episode import *
+from .Parameters import *
+from .Utilities import *
 
 import feedparser
 import os
 from os import mkdir, remove, path
 
-tmpFeedFilePath = u'feed.xml'
-epListFileName = u'episodes.dat'
+tmpFeedFilePath = 'feed.xml'
+epListFileName = 'episodes.dat'
 
 class Podcast:
 	def __init__(self, url, specifNbr = None, podcastDirPath = defaultPodDirPath):
@@ -44,46 +44,46 @@ class Podcast:
 		else:
 			self.author = defaultPodcastAuthor
 
-		self.dirPath = podcastDirPath + self.title.replace(u'/', u'_') + u'/'
+		self.dirPath = podcastDirPath + self.title.replace('/', '_') + '/'
 		try:
 			os.makedirs(self.dirPath)
-			print(u"Directory created")
+			print("Directory created")
 		except OSError as ex:
 			if not os.path.exists(self.dirPath):
 				if os.path.exists(podcastDirPath):
-					print(u"Error, could not create: " + self.dirPath + u":" + unicode(ex))
+					print(("Error, could not create: " + self.dirPath + ":" + str(ex)))
 				else:
-					print(u"The podcast directory " + podcastDirPath + " does not exist.")
+					print(("The podcast directory " + podcastDirPath + " does not exist."))
 				raise
 
 		try:
 			if ('image' in self.parser.feed) and ('href' in self.parser.feed.image):
 				self.imgURL = self.parser.feed.image['href']
-			self.imgPath = self.dirPath + defaultImgName + u'.' + self.imgURL.split(u'.')[-1]
+			self.imgPath = self.dirPath + defaultImgName + '.' + self.imgURL.split('.')[-1]
 			FetchFile(self.imgURL, self.imgPath)
 		except:
-			self.imgURL = u''
+			self.imgURL = ''
 
 		self.episodes = []
 		xmlEpisodes = self.parser.entries
-		print(unicode(len(xmlEpisodes)) + u" entries parsed.")
+		print((str(len(xmlEpisodes)) + " entries parsed."))
 		# Load previously loaded episodes
 		podFilePath = self.dirPath + epListFileName
 		if os.path.exists(podFilePath):
-			print(u'Loading "' + podFilePath + u'"...')
+			print(('Loading "' + podFilePath + '"...'))
 			self.LoadEpisodesFromFile(self.dirPath + epListFileName)
 
 		nbNewEp = 0
 		for xmlEp in xmlEpisodes:
 			# audio only - skip the videos
 			for (ind, encl) in enumerate(xmlEp.enclosures):
-				if ('type' in encl) and (encl['type'] == u'audio/mpeg'):
+				if ('type' in encl) and (encl['type'] == 'audio/mpeg'):
 					ep = Episode(self, xmlEp, ind)
 					if not ep.IsPresentIn(self.episodes):
 						nbNewEp += 1
 						self.episodes.append(ep)
 		if nbNewEp == 0:
-			print(u"No new episodes were published.")
+			print("No new episodes were published.")
 
 		# Order by publication date
 		self.OrderEpisodes()
@@ -92,7 +92,7 @@ class Podcast:
 		if self.loadedFromFile:
 			startInd = 0
 			for (ind, ep) in enumerate(self.episodes):
-				if ep.filePath != u'':
+				if ep.filePath != '':
 					startInd = ind
 					break
 			if (startInd > len(self.episodes) - self.maxNbEpisodes) or (self.maxNbEpisodes == -1):
@@ -104,13 +104,13 @@ class Podcast:
 			ep.FetchURL()
 
 	def LoadXML(self, url):
-		print(u"Fetching " + url + u" ...")
+		print(("Fetching " + url + " ..."))
 		FetchFile(url, tmpFeedFilePath)
-		print(u"Done.")
+		print("Done.")
 		try:
 			self.parser = feedparser.parse(tmpFeedFilePath)
 		except Exception as ex:
-			print(u"Couldn't parse " + url + u":" + unicode(ex))
+			print(("Couldn't parse " + url + ":" + str(ex)))
 		os.remove(tmpFeedFilePath)
 
 	def LoadEpisodesFromFile(self, filePath):
@@ -135,21 +135,21 @@ class Podcast:
 			ep.num = num
 
 	def UpdateTags(self, filts=None):
-		print(u"Updating tags...")
+		print("Updating tags...")
 		nbUp = 0
 		nbFailed = 0
 		for ep in self.episodes:
-			if ep.filePath != u'':
+			if ep.filePath != '':
 				if not ep.UpdateTag(filts):
 					nbFailed += 1
 				nbUp += 1
 		if nbFailed == 0:
 			if nbUp > 0:
-				print(u"Tags from " + unicode(nbUp) + u" files updated successfully.")
+				print(("Tags from " + str(nbUp) + " files updated successfully."))
 			else:
-				print(u"No tags to update.")
+				print("No tags to update.")
 		else:
-			print(unicode(nbFailed) + u"/" + unicode(nbUp) + u" tags were not saved correctly.")
+			print((str(nbFailed) + "/" + str(nbUp) + " tags were not saved correctly."))
 
 	def Save(self):
 		self.SaveEpisodesToFile(self.dirPath + epListFileName)

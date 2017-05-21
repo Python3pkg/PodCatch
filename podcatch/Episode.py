@@ -13,8 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------------
-from Utilities import *
-from Parameters import *
+from .Utilities import *
+from .Parameters import *
 import dateutil.parser
 from mutagen.easyid3 import EasyID3
 from mutagen.flac import FLAC
@@ -27,7 +27,7 @@ EasyID3.RegisterTextKey("albumartist", "TPE2")
 class Episode:
 	def __init__(self, podcast, xmlEp = None, enclInd = 0):
 		self.podcast = podcast
-		self.filePath = u''
+		self.filePath = ''
 		if xmlEp:
 			# Get the podcast attributes
 			self.title = xmlEp.title
@@ -36,11 +36,11 @@ class Episode:
 			elif 'url' in xmlEp.enclosures[enclInd]:
 				self.url = xmlEp.enclosures[enclInd]['url']
 			else:
-				self.url = u''
+				self.url = ''
 			if 'author' in xmlEp:
 				self.author = xmlEp.author
 			else:
-				self.author = u''
+				self.author = ''
 			self.pubDateStr = xmlEp.published
 			self.pubDate = dateutil.parser.parse(self.pubDateStr)
 			self.num = -1
@@ -63,15 +63,15 @@ class Episode:
 		fileObj.write(str(self.num) + '\n')
 
 	def FetchURL(self):
-		if self.filePath == u'':
-			print(u"Fetching " + self.url + u" ...")
-			self.filePath = self.podcast.dirPath + self.title.replace(' ', '_').replace('/', '_') + u'.' + self.url.split(u'.')[-1]
+		if self.filePath == '':
+			print(("Fetching " + self.url + " ..."))
+			self.filePath = self.podcast.dirPath + self.title.replace(' ', '_').replace('/', '_') + '.' + self.url.split('.')[-1]
 			if not FetchFile(self.url, self.filePath):
-				self.filePath = u''
-				print(u"Failed.")
+				self.filePath = ''
+				print("Failed.")
 			else:
 				self.fetched = True
-				print(u"Done.")
+				print("Done.")
 	
 	def IsPresentIn(self, epList):
 		for ep in epList:
@@ -86,7 +86,7 @@ class Episode:
 			tags[field] = content
 
 	def UpdateTag(self, filts=None):
-		if self.filePath != u'':
+		if self.filePath != '':
 			tags = None
 			if os.path.splitext(self.filePath)[1] == '.mp3':
 				try:
@@ -96,32 +96,32 @@ class Episode:
 						tags = mutagen.File(self.filePath, easy=True)
 						tags.add_tags()
 					except Exception as ex:
-						print(u"Error while loading mp3 tags for " + self.filePath + u": " + unicode(ex))
+						print(("Error while loading mp3 tags for " + self.filePath + ": " + str(ex)))
 						return False
 			elif os.path.splitext(self.filePath)[1] == '.flac':
 				try:
 					tags = FLAC(self.filePath)
 				except Exception as ex:
-					print(u"Error while loading flac tags for " + self.filePath + u": " + unicode(ex))
+					print(("Error while loading flac tags for " + self.filePath + ": " + str(ex)))
 					return False
 			else:
-				print(u"File extension not supported: " + unicode(self.filePath))
+				print(("File extension not supported: " + str(self.filePath)))
 				return False
 			
 			try:
 				self.applyFilts(tags, 'albumartist', self.podcast.author, filts)
-				if self.author != u'':
+				if self.author != '':
 					self.applyFilts(tags, 'artist', self.author, filts)
 				else:
 					self.applyFilts(tags, 'artist', self.podcast.author, filts)
 				self.applyFilts(tags, 'title', self.title, filts)
 				self.applyFilts(tags, 'album', self.podcast.title, filts)
-				self.applyFilts(tags, 'tracknumber', unicode(self.num), filts)
+				self.applyFilts(tags, 'tracknumber', str(self.num), filts)
 				self.applyFilts(tags, 'genre', defaultGenre, filts)
-				self.applyFilts(tags, 'date', unicode(self.pubDate.year), filts)
+				self.applyFilts(tags, 'date', str(self.pubDate.year), filts)
 				tags.save()
 			except Exception as ex:
-				print(u"Couldn't add tag to " + self.filePath + u": " + unicode(ex))
+				print(("Couldn't add tag to " + self.filePath + ": " + str(ex)))
 				return False
 
 		return True

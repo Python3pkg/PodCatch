@@ -15,14 +15,14 @@
 # ----------------------------------------------------------------------------
 
 def main():
-	from Podcast import Podcast
-	from Parameters import defaultPodDirPath, podcastListPath
+	from .Podcast import Podcast
+	from .Parameters import defaultPodDirPath, podcastListPath
 	import re
 	import sys
 	import os
 
-	p = re.compile(u'[ \t]*(?:([0-9\-]*)[ \t]+)?(https?://[^ ]*)[ \t\n]*((?:[^"]+ "[^"]*" "[^"]*"[ \t]*)+)?')
-	subP = re.compile(u'([^"]+) "([^"]*)" "([^"]*)"[ \t]*')
+	p = re.compile('[ \t]*(?:([0-9\-]*)[ \t]+)?(https?://[^ ]*)[ \t\n]*((?:[^"]+ "[^"]*" "[^"]*"[ \t]*)+)?')
+	subP = re.compile('([^"]+) "([^"]*)" "([^"]*)"[ \t]*')
 
 	if len(sys.argv) > 1:
 		podcastListPath = sys.argv[1]
@@ -32,7 +32,7 @@ def main():
 	nbPodUpdated = 0
 
 	for line in podcastList:
-		podcastUrl = line.decode('utf-8').strip(u'\n \t')
+		podcastUrl = line.decode('utf-8').strip('\n \t')
 		m = p.match(podcastUrl)
 		if m:
 			gr = m.groups()
@@ -48,16 +48,16 @@ def main():
 			podcast.Save()
 			podcast.UpdateTags(regExpFilts)
 			nbPodUpdated += 1
-			print(u"---------------------------------------------")
+			print("---------------------------------------------")
 		else:
 			currPodPath = podcastUrl + ('' if podcastUrl.endswith('/') else '/')
 			if not os.path.isabs(currPodPath):
 				raise ValueError(currPodPath + ' (in ' + podcastListPath + ') is not an absolute path.')
 	podcastList.close()
 
-	print(unicode(nbPodUpdated) + u' podcast' + (' has' if nbPodUpdated == 1 else 's have') +' been updated.')
+	print((str(nbPodUpdated) + ' podcast' + (' has' if nbPodUpdated == 1 else 's have') +' been updated.'))
 	if nbPodUpdated == 0:
-		print(podcastListPath + u" didn't contain any podcasts.")
+		print((podcastListPath + " didn't contain any podcasts."))
 
 
 if __name__ == '__main__':

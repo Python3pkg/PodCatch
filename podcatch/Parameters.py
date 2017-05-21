@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------------
 import os
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 import pkg_resources
 import appdirs
 
@@ -38,25 +38,25 @@ paramParser = SafeConfigParser()
 paramParser.read(cfgFile)
 
 # General
-podcastListPath = os.path.expanduser(unicode(paramParser.get('General', 'podcastListPath')))
+podcastListPath = os.path.expanduser(str(paramParser.get('General', 'podcastListPath')))
 if not os.path.isabs(podcastListPath):
 	podcastListPath = os.path.join(cfgDir, podcastListPath)
 
-defaultPodDirPath = os.path.expanduser(unicode(paramParser.get('General', 'defaultPodDirPath')))
-defaultPodDirPath = defaultPodDirPath + ('' if defaultPodDirPath.endswith(u'/') else u'/')
+defaultPodDirPath = os.path.expanduser(str(paramParser.get('General', 'defaultPodDirPath')))
+defaultPodDirPath = defaultPodDirPath + ('' if defaultPodDirPath.endswith('/') else '/')
 if not os.path.isabs(defaultPodDirPath):
-	raise ValueError(u'The defaultPodDirPath parameter in ' + cfgFile + u' should be an absolute path.')
+	raise ValueError('The defaultPodDirPath parameter in ' + cfgFile + ' should be an absolute path.')
 
 # Podcasts 
 try:
 	maxNbEpisodes = int(paramParser.get('Podcasts', 'maxNbEpisodes'))
 except:
 	maxNbEpisodes = defaultMaxNbEpisodes
-	raise ValueError(u"Config error: maxNbEpisodes is not an integer (in " + cfgFile + u").")
-defaultPodcastTitle = unicode(paramParser.get('Podcasts', 'defaultPodcastTitle'))
-defaultPodcastAuthor = unicode(paramParser.get('Podcasts', 'defaultPodcastAuthor'))
-defaultImgName = unicode(paramParser.get('Podcasts', 'defaultImgName'))
+	raise ValueError("Config error: maxNbEpisodes is not an integer (in " + cfgFile + ").")
+defaultPodcastTitle = str(paramParser.get('Podcasts', 'defaultPodcastTitle'))
+defaultPodcastAuthor = str(paramParser.get('Podcasts', 'defaultPodcastAuthor'))
+defaultImgName = str(paramParser.get('Podcasts', 'defaultImgName'))
 
 # Tagging
-defaultGenre = unicode(paramParser.get('Tagging', 'defaultGenre'))
+defaultGenre = str(paramParser.get('Tagging', 'defaultGenre'))
 

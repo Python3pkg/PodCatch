@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # ----------------------------------------------------------------------------
-import re, htmlentitydefs
+import re, html.entities
 import os
 from tqdm import tqdm
 import requests
@@ -29,12 +29,12 @@ def FetchFile(url, filePath):
 			for data in tqdm(response.iter_content(chunk_size=csz), total=sz, unit='kB'):
 				fileObj.write(data)
 	except IOError as ex:
-		print(u"IO error saving " + url + u": " + unicode(ex))
+		print(("IO error saving " + url + ": " + str(ex)))
 		fileObj.close()
 		os.remove(filePath)
 		return False
 	except Exception as ex:
-		print(u"Error: " + unicode(ex) + u" did not fetch " + filePath)
+		print(("Error: " + str(ex) + " did not fetch " + filePath))
 		fileObj.close()
 		os.remove(filePath)
 		return False
